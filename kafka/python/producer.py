@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+'''
+callback也是保证分区有序的, 比如2条消息, a先发送, b后发送, 对于同一个分区, 那么会先回调a的callback, 再回调b的callback
+'''
+
 import json
 from kafka import KafkaProducer
 
@@ -22,7 +26,8 @@ def main():
     )
     producer.send(topic, value=b'{"test_msg":"hello world"}').add_callback(on_send_success).add_callback(
         on_send_error)
-    producer.flush()
+    # close() 方法会阻塞等待之前所有的发送请求完成后再关闭 KafkaProducer
+    producer.close()
 
 
 def main2():
@@ -36,7 +41,8 @@ def main2():
     )
     producer.send(topic, value={"test_msg": "hello world"}).add_callback(on_send_success).add_callback(
         on_send_error)
-    producer.flush()
+    # close() 方法会阻塞等待之前所有的发送请求完成后再关闭 KafkaProducer
+    producer.close()
 
 
 if __name__ == '__main__':
