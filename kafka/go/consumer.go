@@ -1,23 +1,28 @@
 package main
 
+// 指定group_id, 消费者重启后可以继续从上一次结束的地方进行消费
+
 import (
 	"context"
-	"fmt"
 	"github.com/segmentio/kafka-go"
+	"log"
 )
 
+func init() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+}
+
 func main() {
-	fmt.Println("start ...")
+	log.Println("start ...")
 
 	config := kafka.ReaderConfig{
 		Brokers: []string{"localhost:9092"},
 		Topic:   "demo",
 		GroupID: "spider1",
 		// Partition不能和GroupId同时设置
-		Partition: 0,
-		MinBytes:  10e3,
-		MaxBytes:  10e6,
-		//StartOffset: 400,
+		//Partition: 0,
+		MinBytes:       10e3,
+		MaxBytes:       10e6,
 		CommitInterval: 5,
 	}
 
@@ -25,11 +30,11 @@ func main() {
 	for {
 		msg, err := consumer.ReadMessage(context.Background())
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			break
 		}
-		fmt.Printf("[message at topic:%v partition:%v offset:%v] value:%s\n", msg.Topic, msg.Partition, msg.Offset, string(msg.Value))
+		log.Printf("[message at topic:%v partition:%v offset:%v] value:%s\n", msg.Topic, msg.Partition, msg.Offset, string(msg.Value))
 	}
 	consumer.Close()
-	fmt.Println("End !")
+	log.Println("End !")
 }

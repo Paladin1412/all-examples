@@ -2,13 +2,17 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/segmentio/kafka-go"
+	"log"
 	"strconv"
 )
 
+func init() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+}
+
 func main() {
-	fmt.Println("start ...")
+	log.Println("starting ...")
 
 	config := kafka.WriterConfig{
 		Brokers:  []string{"localhost:9092"},
@@ -25,11 +29,11 @@ func main() {
 		}
 		err := producer.WriteMessages(context.Background(), msg)
 		if err != nil {
-			fmt.Printf("error msg: %v\n", msg)
+			log.Printf("error msg: %v\n", msg)
 		}
-		fmt.Printf("send %d\n", i)
+		log.Printf("send %d\n", i)
 	}
 
 	producer.Close()
-	fmt.Println("End !")
+	log.Println("End !")
 }
