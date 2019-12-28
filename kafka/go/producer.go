@@ -1,44 +1,35 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"github.com/Shopify/sarama"
+	"github.com/segmentio/kafka-go"
 	"strconv"
 )
 
 func main() {
-	const topic = "demo"
-	const kafka_server = "127.0.0.1:9092"
+	fmt.Println("start ...")
 
-	config := sarama.NewConfig()
-	config.Producer.Retry.Max = 5
-	// ack=1
-	config.Producer.RequiredAcks = sarama.WaitForLocal
-	config.Producer.Partitioner = sarama.NewRoundRobinPartitioner
-	// if use sync producer, this must be true
-	config.Producer.Return.Successes = true
-
-	// use sync producer
-	client, err := sarama.NewSyncProducer([]string{kafka_server}, config)
-	if err != nil {
-		fmt.Println("producer close, err:", err)
-		return
+	config := kafka.WriterConfig{
+		Brokers:  []string{"localhost:9092"},
+		Topic:    "demo",
+		Balancer: &kafka.RoundRobin{},
+		Async:    true,
 	}
-	defer client.Close()
+
+	producer := kafka.NewWriter(config)
 
 	for i := 0; i < 10; i++ {
-		// build message
-		msg := &sarama.ProducerMessage{}
-		msg.Topic = topic
-		msg.Value = sarama.StringEncoder(strconv.Itoa(i))
-
-		pid, offset, err := client.SendMessage(msg)
-		if err != nil {
-			fmt.Println("send message failed,", err)
-			return
+		msg := kafka.Message{
+			Value: []byte(strconv.Itoa(i)),
 		}
-
-		fmt.Printf("send msg: %v, pid:%v offset:%v\n", msg.Value, pid, offset)
+		err := producer.WriteMessages(context.Background(), msg)
+		if err != nil {
+			fmt.Printf("error msg: %v\n", msg)
+		}
+		fmt.Printf("send %d\n", i)
 	}
 
+	producer.Close()
+	fmt.Println("End !")
 }
