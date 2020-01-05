@@ -9,6 +9,8 @@ verify_ssl = true
 kafka-python = "==1.4.7"
 ipython = "==7.10.2"
 redis = "==3.3.11"
+scrapy = "*"
+scrapy-redis = "*"
 
 [requires]
 python_version = "3.7"
