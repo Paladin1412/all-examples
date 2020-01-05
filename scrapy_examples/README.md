@@ -7,3 +7,4 @@ scrapy和scrapy-redis常用配置和模板
 - `GET/POST(form)/POST(json)` 请求
 - 统计插件
 - `DOWNLOADER_MIDDLEWARES`中间件更改url
+- 从start_urls中取任务改为批量取, 提升速度
