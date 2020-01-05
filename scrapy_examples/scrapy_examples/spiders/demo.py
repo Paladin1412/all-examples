@@ -2,7 +2,7 @@
 
 import json
 import scrapy
-from scrapy_redis.spiders import RedisSpider
+from scrapy_examples.spiders import BaseRedisSpider
 
 REDIS_CONF = {
     "host": "127.0.0.1",
@@ -11,7 +11,7 @@ REDIS_CONF = {
     "password": ""
 }
 
-class DemoSpider(RedisSpider):
+class DemoSpider(BaseRedisSpider):
     '''
     scrapy crawl demo
 
