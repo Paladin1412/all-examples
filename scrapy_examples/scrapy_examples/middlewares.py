@@ -10,11 +10,30 @@ from scrapy import signals
 
 
 class ChangeUrlMiddleware(object):
-    '''给每个请求加上时间戳'''
+    '''改变请求的url'''
     def process_request(self, request, spider):
         request._set_url(url=request.url + str(int(time.time())))
-    
 
+
+
+from scrapy.downloadermiddlewares.retry import RetryMiddleware
+
+class RetryMiddleware(RetryMiddleware):
+    '''自定义重试中间件'''
+    def process_response(self, request, response, spider):
+        if request.meta.get('dont_retry', False):
+            return response
+
+        if response.status in self.retry_http_codes:
+            reason = response_status_message(response.status)
+            return self._retry(request, reason, spider) or response
+
+        # this is your check
+        if 'xxxx' not in response.text:
+            retry_reason = 'retry xxxxx'
+            return self._retry(request, retry_reason, spider) or response
+        return response
+    
 
 class ScrapyExamplesSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,

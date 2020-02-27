@@ -30,6 +30,7 @@ class DemoSpider(BaseRedisSpider):
         'SCHEDULER_QUEUE_CLASS': 'scrapy_redis.queue.PriorityQueue',
         'DOWNLOADER_MIDDLEWARES': {
             'scrapy_examples.middlewares.ChangeUrlMiddleware': 100,
+            'scrapy_examples.middlewares.RetryMiddleware': 110,
         },
         # 'ITEM_PIPELINES': {
         # },
