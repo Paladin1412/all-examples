@@ -1,3 +1,5 @@
+from mitmproxy import ctx
+
 def request(flow):
     # 获取当前url
     url = flow.request.url
@@ -5,12 +7,13 @@ def request(flow):
     flow.request.headers['User-Agent'] = 'MitmProxy'
 
 def response(flow):
-    url = flow.request.url
+    log = ctx.log
 
+    url = flow.request.url
     response = flow.response
 
-    print(response.status_code)
-    print(response.headers)
-    print(response.cookies)
-    print(response.content)
+    log.info(response.status_code)
+    log.info(response.headers)
+    log.info(response.cookies)
+    log.info(response.content)
     
