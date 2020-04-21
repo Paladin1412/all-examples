@@ -25,16 +25,21 @@ def main():
     while True:
         try:
             # return a dict
-            batch_msgs = consumer.poll(timeout_ms=1000, max_records=2)
+            batch_msgs = consumer.poll(timeout_ms=1000, max_records=33)
             if not batch_msgs:
                 continue
             '''
             {TopicPartition(topic='demo', partition=0): [ConsumerRecord(topic='demo', partition=0, offset=42, timestamp=1576425111411, timestamp_type=0, key=None, value=b'74', headers=[], checksum=None, serialized_key_size=-1, serialized_value_size=2, serialized_header_size=-1)]}
             '''
+            cnt = 0
             for tp, msgs in batch_msgs.items():
+                cnt += len(msgs)
                 print('topic: {}, partition: {} receive length: '.format(tp.topic, tp.partition, len(msgs)))
                 for msg in msgs:
                     print(msg.value)
+
+            print(f'batch_cnt:{cnt}')
+
         except KeyboardInterrupt:
             break
 

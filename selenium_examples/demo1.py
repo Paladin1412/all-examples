@@ -1,21 +1,28 @@
+import time
+import base64
 from selenium.webdriver import Chrome, ActionChains, ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
 
+bg_img = 'bg.img'
 
-# 初始化
+# 初始化浏览器
 option = ChromeOptions()
 option.add_argument('no-sandbox')
 option.add_argument('disable-dev-shm-usage')
+option.add_experimental_option('excludeSwitches', ['enable-automation'])
 option.add_argument('--proxy-server=http://127.0.0.1:8080')
 
 web = Chrome(ChromeDriverManager().install(), options=option)
 
-
 # 反检测
 # 移除webdriver
-script = 'Object.defineProperty(navigator, "webdriver", {get: () => undefined,});'
-web.execute_script(script)
-
+web.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+    "source": """
+    Object.defineProperty(navigator, 'webdriver', {
+      get: () => undefined
+    })
+  """
+})
 
 # 保存canvas内容
 canvas = web.find_element_by_css_selector('#dx_captcha_basic_bg_1 > canvas')
@@ -27,9 +34,9 @@ canvas_png = base64.b64decode(canvas_base64)
 with open(bg_img, 'wb') as f:
     f.write(canvas_png)
 
-
 paths = [[1, 2], [3, 4]]
 # 按住滑块不放
+slide = web.find_element_by_css_selector('xxxxxx')
 ActionChains(web).click_and_hold(slide).perform()
 time.sleep(0.5)
 
