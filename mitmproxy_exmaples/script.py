@@ -12,8 +12,8 @@ def response(flow):
     url = flow.request.url
     response = flow.response
 
-    log.info(response.status_code)
-    log.info(response.headers)
-    log.info(response.cookies)
-    log.info(response.content)
+    log.info(str(response.status_code))
+    log.info(str(response.headers))
+    log.info(str(response.cookies))
+    log.info(str(response.content))
     
