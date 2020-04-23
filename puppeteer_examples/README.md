@@ -252,4 +252,22 @@ await browser.close()
 #### 参考
 - https://stackoverflow.com/questions/50418994/pass-signed-cookie-to-puppeteer
 
+## 设置移动端
+```js
+const puppeteer = require('puppeteer');
+const devices = require('puppeteer/DeviceDescriptors');
+const iPhone = devices['iPhone X'];
+
+(async () => {
+    const browser = await puppeteer.launch({headless:false});
+    const page = await browser.newPage();
+    await page.emulate(iPhone);
+
+    // await page.setCookie(...all_cookies)
+
+    const url = 'https://www.baidu.com'
+    await page.goto(url);
+})();
+```
+
 
