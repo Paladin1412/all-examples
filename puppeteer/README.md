@@ -249,5 +249,7 @@ await page.screenshot({
 await browser.close()
 ```
 
+#### 参考
+- https://stackoverflow.com/questions/50418994/pass-signed-cookie-to-puppeteer
 
 
