@@ -101,3 +101,7 @@ class DemoSpider(BaseRedisSpider):
 
     def parse(self, response):
         self.logger.debug(response.url)
+
+        # 命令行调试代码, 运行到此处会直接暂停, 可以直接用response调xpath等信息
+        # from scrapy.shell import inspect_response
+        # inspect_response(response, self)
