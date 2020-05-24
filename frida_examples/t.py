@@ -13,7 +13,7 @@ with open('test.js') as f:
     jscode = f.read()
 
 # 获取指定app当前运行的进程
-process = frida.get_usb_device().attach('com.example.seccon2015.rock_paper_scissors')
+process = frida.get_usb_device().attach('com.loco.example.OkHttp3SSLPinning')
 # 注入js代码
 script = process.create_script(jscode)
 script.on('message', on_message)
