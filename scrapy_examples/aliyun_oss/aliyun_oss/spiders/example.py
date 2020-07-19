@@ -17,7 +17,6 @@ class ExampleSpider(scrapy.Spider):
             'aliyun_oss.pipelines.AliyunOssPipeline': 100,
         },
         'DOWNLOAD_DELAY': 1,
-        'IMAGES_STORE': 'aliyun_oss'
     }
 
     def start_requests(self):
